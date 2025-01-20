@@ -1,0 +1,36 @@
+{% extends 'mailing_list_mngr/base.html' %}
+{% load my_tags %}
+{% block content %}
+{% if user.is_authenticated %}
+<div class="card px-4 py-5 my-5 text-center">
+    <h2 class="display-5 fw-bold text-body-emphasis">Получатель</h2>
+</div>
+<div class="col-lg-9 mx-auto">
+    <div class="row text-center">
+        <div class="col-12">
+            <div class="card mb-6 box-shadow">
+                <div class="card-header">
+                    <h4 class="text-primary">
+                        {{object.email }}
+                    </h4>
+                    {% if user.is_authenticated and user == object.owner %}
+                    <a class="btn btn-primary" href="{% url 'mailing_list_mngr:recipient_update' object.pk %}"
+                       role="button">
+                        Редактировать </a>
+                    <a class="btn btn-primary" href="{% url 'mailing_list_mngr:recipient_delete' object.pk %}"
+                       role="button">
+                        Удалить </a>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                        <li>{{ object.name }}</li>
+                        <li>{{ object.comments }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

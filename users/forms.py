@@ -1,5 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
-from django.forms import BooleanField, ModelForm
+from django.forms import BooleanField, BaseForm
 from django.shortcuts import get_object_or_404
 from django import forms
 

@@ -1,0 +1,41 @@
+{% extends 'mailing_list_mngr/base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+<div class="card px-4 py-5 my-5 text-center">
+    <h2 class="display-5 fw-bold text-body-emphasis">Рассылки</h2>
+</div>
+<div class="col-lg-9 mx-auto">
+    <div class="row">
+        <div class="col-6 p-2">
+            {% if user.is_authenticated %}
+            <div class="card mb-12 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">
+                        <a class="text-muted" href="create">Новая рассылка</a>
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <a class="btn btn-primary" href="create" role="button">Создать</a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% for object in object_list %}
+        <div class="col-12 p-2">
+            <div class="card mb-12 box-shadow">
+                <div class="card-header">
+                    <h2> {{ object.header }} / {{ object.status }}</h2>
+                </div>
+                <div class="card-body">
+                    <p>{{ object.message.name }} отправлять с {{ object.started_at | date:'d.m.Y H:i' }} по {{ object.finished_at | date:'d.m.Y H:i' }}</p>
+                    <p>{{ object.message.body|slice:100 }}
+                        <a class="btn btn-secondary" href="{{ object.pk }}" role="button">View details &raquo;</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'mailing_list_mngr/base.html' %}
+{% block content %}
+{% if user.is_authenticated and perms.users.can_block_user %}
+<div class="card px-4 py-5 my-5 text-center">
+    <h2 class="display-5 fw-bold text-body-emphasis">Пользователи сервиса</h2>
+</div>
+
+<div class="col-lg-9 mx-auto">
+    <div class="col-md-12">
+        {% for object in object_list %}
+        <div class="col-md-12">
+            {% if object.is_active %}
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1" checked>
+                <h4>{{ object.email }}</h4>
+                <a class="btn btn-primary" href="{% url 'users:user_is_active_chng' object.id %}" role="button">
+                    Заблокировать пользователя </a>
+            </div>
+            {% else %}
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck2">
+                <h4>{{ object.email }}</h4>
+                <a class="btn btn-warning" href="{% url 'users:user_is_active_chng' object.id %}" role="button">
+                    Разблокировать пользователя </a>
+            </div>
+            {% endif %}
+
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endblock %}

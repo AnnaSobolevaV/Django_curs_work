@@ -11,6 +11,7 @@ class Command(BaseCommand):
             first_name='Admin',
             last_name='curs6_work',
             is_staff=True,
+            is_active=True,
             is_superuser=True
         )
 

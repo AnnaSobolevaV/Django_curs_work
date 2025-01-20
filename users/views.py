@@ -1,19 +1,47 @@
 import random
 import secrets
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView as BaseLoginView
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, FormView
+from django.views.generic import CreateView, FormView, ListView
 
 from config.settings import EMAIL_HOST_USER
 from users.forms import UserRegisterForm, MyPasswordResetForm
 from users.models import User
 
 
+class UserListView(ListView, LoginRequiredMixin):
+    model = User
+    template_name = 'users/user_list.html'
+    success_url = reverse_lazy("users:users")
+
+    def get_queryset(self, *args, **kwargs):
+        queryset = super().get_queryset()
+        user = self.request.user
+        if user.is_authenticated:
+            queryset = User.objects.filter(is_superuser=False).exclude(email=self.request.user)
+            print(queryset)
+        return queryset
+
+
+def user_is_active_chng(request, id_):
+    user = request.user
+    if user.is_authenticated and user.has_perm('users.can_block_user'):
+        user_chngd = get_object_or_404(User, id=id_)
+        if user_chngd.is_active:
+            user_chngd.is_active = False
+        else:
+            user_chngd.is_active = True
+        user_chngd.save()
+    return redirect(reverse("users:users"))
+
+
 class LoginView(BaseLoginView):
     template_name = 'users/login.html'
+    success_url = reverse_lazy("mailing_list_mngr:home/")
 
 
 def new_password_creator():
@@ -86,7 +114,7 @@ class RegistrationView(CreateView):
         user.token = token
         user.save()
         host = self.request.get_host()
-        url = f'http://{host}/users/email_confirm/{token}/'
+        url = f'http://{host}/email_confirm/{token}/'
         try:
             send_mail(subject='Подтверждение почты',
                       message=f'Перейдите по ссылке: {url}',
