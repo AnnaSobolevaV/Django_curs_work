@@ -1,0 +1,54 @@
+{% extends 'mailing_list_mngr/base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+{% if user == object.owner or perms.mailing_list_mngr.view_mailinglist %}
+<div class="card px-4 py-5 my-5 text-center">
+    <h2 class="display-5 fw-bold text-body-emphasis">Рассылка</h2>
+</div>
+<div class="col-lg-9 mx-auto">
+    <div class="row text-center">
+        <div class="col-12">
+            <div class="card mb-6 box-shadow">
+                <div class="card-header">
+                    <h4 class="text-primary">
+                        {{ object.header }} / {{ object.status }}
+                        {% if object.status == "Создана" or object.status == "Запущена" %}
+                        {% if user == object.owner or perms.mailing_list_mngr.can_send_mailingList %}
+                        {% if start_date_ok %}
+                        <a class="btn btn-primary" href="{% url 'mailing_list_mngr:mailing_list_sending' object.pk %}"
+                           role="button">Отправить</a>
+                        {% endif %}
+                        {% endif %}
+                        {% if perms.mailing_list_mngr.can_stop_mailingList %}
+                        <a class="btn btn-primary" href="{% url 'mailing_list_mngr:mailing_list_stop' object.pk %}"
+                           role="button">Завершить</a>
+                        {% endif %}
+                        {% endif %}
+                    </h4>
+                    {% if user.is_authenticated and user == object.owner %}
+                    <a class="btn btn-primary" href="{% url 'mailing_list_mngr:mailing_list_update' object.pk %}"
+                       role="button">
+                        Редактировать </a>
+                    <a class="btn btn-primary" href="{% url 'mailing_list_mngr:mailing_list_delete' object.pk %}"
+                       role="button">
+                        Удалить </a>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                        <li>{{ object.message.name }} отправлять с {{ object.started_at | date:'d.m.Y H:i' }} по {{ object.finished_at | date:'d.m.Y H:i' }}
+                        </li>
+                        <li>для получателей:</li>
+                        {% for recipient in recipients %}
+                        <li>{{ recipient }}</li>
+                        {% endfor %}
+                        <li>Сообщение: {{ object.message.body }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,31 @@
+<ul class="navbar-nav">
+    {% if user.is_authenticated %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'mailing_list_mngr:mailing_list'%}">Рассылки</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'mailing_list_mngr:messages'%}">Сообщения</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'mailing_list_mngr:recipients'%}">Получатели</a>
+    </li>
+    {% if perms.users.can_block_user %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'users:users'%}">Пользователи</a>
+    </li>
+    {% endif %}
+    <p> You have been succesfully logged in. </p>
+    <form action="{% url 'users:logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit"> {{ user }} - Выход</button>
+    </form>
+
+    {% else %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'users:register' %}">Зарегистрироваться</a>
+    </li>
+    {% endif %}
+</ul>
+
+
+

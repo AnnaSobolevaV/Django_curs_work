@@ -1,0 +1,64 @@
+{% extends 'mailing_list_mngr/base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+{% if object %}
+{% if user == object.owner %}
+<div class="card px-4 py-5 my-5 text-center">
+    <h2 class="display-5 fw-bold text-body-emphasis"> Сообщение</h2>
+</div>
+<div class="col-lg-9 mx-auto">
+    <form method="POST" action="" class="form-floating" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="card mb-6 box-shadow">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">
+                            Редактирование сообщения
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        {% csrf_token %}
+                        {{ form.as_p}}
+                        <a class="p-2 btn btn-lg btn-block btn-outline-primary"
+                           href="{% url 'mailing_list_mngr:messages' %}">Отменить</a>
+                        <button type="submit" class="btn btn-lg btn-block btn-outline-primary">
+                            Сохранить
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endif %}
+{% else %}
+<div class="card px-4 py-5 my-5 text-center">
+    <h2 class="display-5 fw-bold text-body-emphasis"> Сообщение</h2>
+</div>
+<div class="col-lg-9 mx-auto">
+    <form method="POST" action="" class="form-floating" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+                <div class="card mb-6 box-shadow">
+                    <div class="card-header">
+                        <h4 class="my-0 font-weight-normal">
+                            Создание нового сообщения
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        {% csrf_token %}
+                        {{ form.as_p}}
+                        <a class="p-2 btn btn-lg btn-block btn-outline-primary"
+                           href="{% url 'mailing_list_mngr:messages' %}">Отменить</a>
+                        <button type="submit" class="btn btn-lg btn-block btn-outline-primary">
+                            Создать
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+{% endif %}
+{% endif %}
+{% endblock %}
