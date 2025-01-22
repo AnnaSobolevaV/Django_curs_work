@@ -1,3 +1,5 @@
+import datetime
+
 from django import forms
 from django.forms import ModelForm
 
@@ -24,13 +26,19 @@ class MailingListForm(ModelForm):
     )
 
     started_at = forms.DateTimeField(
+        label='Дата старта рассылки',
         widget=forms.DateTimeInput(format='%d.%m.%Y %H:%M'),
-        input_formats=('%d.%m.%Y %H:%M',)
+        input_formats=('%d.%m.%Y %H:%M',),
+        initial=datetime.date.today,
+        help_text='Введите дату в формате: дд.мм.гггг чч:мм.'
     )
 
     finished_at = forms.DateTimeField(
+        label='Дата окончания рассылки',
         widget=forms.DateTimeInput(format='%d.%m.%Y %H:%M'),
-        input_formats=('%d.%m.%Y %H:%M',)
+        input_formats=('%d.%m.%Y %H:%M',),
+        initial=datetime.date.today,
+        help_text='Введите дату в формате: дд.мм.гггг чч:мм.'
     )
 
     class Meta:
